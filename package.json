@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/danyapac3/battleship/issues"
   },
-  "homepage": "https://github.com/danyapac3/battleship#readme"
+  "homepage": "https://github.com/danyapac3/battleship#readme",
+  "devDependencies": {
+    "jest": "^30.2.0"
+  }
 }
