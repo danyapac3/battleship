@@ -1,8 +1,10 @@
 const outOfBoundsMsg = "Ship must be placed within bounds";
 const shipsOverlappingMsg = "Ships mustn't overlap";
+const sameShipPlacedMsg = "Can't place the same ship";
 
 export default class Gameboard {
   constructor() {
+    this.ships = [];
     this.shipPositions = Array.from({ length: 10 }).map(() =>
       Array.from({ length: 10 }).fill(null)
     );
@@ -19,6 +21,10 @@ export default class Gameboard {
       throw outOfBoundsMsg;
     }
 
+    if (this.ships.includes(ship)) {
+      throw sameShipPlacedMsg;
+    }
+
     for (let i = 0; i < ship.length; i++) {
       const xOffset = orientation === "horizontal" ? i : 0;
       const yOffset = orientation === "vertical" ? i : 0;
@@ -32,5 +38,7 @@ export default class Gameboard {
       const yOffset = orientation === "vertical" ? i : 0;
       this.shipPositions[x - 1 + xOffset][y - 1 + yOffset] = ship;
     }
+
+    this.ships.push(ship);
   }
 }
