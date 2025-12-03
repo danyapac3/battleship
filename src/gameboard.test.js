@@ -1,9 +1,10 @@
 import Gameboard from "./gameboard.js";
+import {
+  OutOfBoundsError,
+  SameShipPlacedError,
+  ShipOverlappingError,
+} from "./gameboard.js";
 import Ship from "./ship.js";
-
-const outOfBoundsMsg = "Ship must be placed within bounds";
-const shipsOverlappingMsg = "Ships mustn't overlap";
-const sameShipPlacedMsg = "Can't place the same ship";
 
 describe("gameboard", () => {
   describe("placeShip method", () => {
@@ -18,21 +19,21 @@ describe("gameboard", () => {
       const gameboard = new Gameboard();
       expect(() => {
         gameboard.placeShip(new Ship(1), -1, -1, "vertical");
-      }).toThrow(outOfBoundsMsg);
+      }).toThrow(OutOfBoundsError);
       expect(() => {
         gameboard.placeShip(new Ship(1), 11, 11, "vertical");
-      }).toThrow(outOfBoundsMsg);
+      }).toThrow(OutOfBoundsError);
     });
 
     test("Ship overlaps one of bounds", () => {
       const gameboard = new Gameboard();
       expect(() => {
         gameboard.placeShip(new Ship(3), 9, 1, "horizontal");
-      }).toThrow(outOfBoundsMsg);
+      }).toThrow(OutOfBoundsError);
 
       expect(() => {
         gameboard.placeShip(new Ship(3), 1, 9, "vertical");
-      }).toThrow(outOfBoundsMsg);
+      }).toThrow(OutOfBoundsError);
     });
 
     test("Ships are placed at the same place", () => {
@@ -42,7 +43,7 @@ describe("gameboard", () => {
       gameboard.placeShip(ship1, 1, 1, "horizontal");
       expect(() => {
         gameboard.placeShip(ship2, 1, 1, "horizontal");
-      }).toThrow(shipsOverlappingMsg);
+      }).toThrow(ShipOverlappingError);
     });
 
     test("Long ships are overlapping", () => {
@@ -53,7 +54,7 @@ describe("gameboard", () => {
       gameboard.placeShip(ship1, 3, 1, "vertical");
       expect(() => {
         gameboard.placeShip(ship2, 1, 3, "horizontal");
-      }).toThrow(shipsOverlappingMsg);
+      }).toThrow(ShipOverlappingError);
     });
 
     test("Same ship is placed twice at the same place", () => {
@@ -62,7 +63,7 @@ describe("gameboard", () => {
       expect(() => {
         gameboard.placeShip(ship1, 1, 1, "horizontal");
         gameboard.placeShip(ship1, 2, 1, "horizontal");
-      }).toThrow(sameShipPlacedMsg);
+      }).toThrow(SameShipPlacedError);
     });
   });
   describe("hit method", () => {});
