@@ -1,6 +1,20 @@
-const outOfBoundsMsg = "Ship must be placed within bounds";
-const shipsOverlappingMsg = "Ships mustn't overlap";
-const sameShipPlacedMsg = "Can't place the same ship";
+export class OutOfBoundsError extends Error {
+  constructor() {
+    super("Ship must be placed within bounds");
+  }
+}
+
+export class ShipOverlappingError extends Error {
+  constructor() {
+    super("Ships mustn't overlap");
+  }
+}
+
+export class SameShipPlacedError extends Error {
+  constructor() {
+    super("Can't place the same ship");
+  }
+}
 
 export default class Gameboard {
   constructor() {
@@ -12,24 +26,24 @@ export default class Gameboard {
 
   placeShip(ship, x, y, orientation = "horizontal") {
     if (x < 1 || y < 1 || x > 10 || y > 10) {
-      throw outOfBoundsMsg;
+      throw new OutOfBoundsError();
     }
     if (orientation === "horizontal" && x + ship.length - 1 > 10) {
-      throw outOfBoundsMsg;
+      throw new OutOfBoundsError();
     }
     if (orientation === "vertical" && y + ship.length - 1 > 10) {
-      throw outOfBoundsMsg;
+      throw new OutOfBoundsError();
     }
 
     if (this.ships.includes(ship)) {
-      throw sameShipPlacedMsg;
+      throw new SameShipPlacedError();
     }
 
     for (let i = 0; i < ship.length; i++) {
       const xOffset = orientation === "horizontal" ? i : 0;
       const yOffset = orientation === "vertical" ? i : 0;
       if (this.shipPositions[x - 1 + xOffset][y - 1 + yOffset] !== null) {
-        throw shipsOverlappingMsg;
+        throw new ShipOverlappingError();
       }
     }
 
