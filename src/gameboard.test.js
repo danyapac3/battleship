@@ -3,6 +3,7 @@ import Ship from "./ship.js";
 
 const outOfBoundsMsg = "Ship must be placed within bounds";
 const shipsOverlappingMsg = "Ships mustn't overlap";
+const sameShipPlacedMsg = "Can't place the same ship";
 
 describe("gameboard", () => {
   describe("placeShip method", () => {
@@ -53,6 +54,15 @@ describe("gameboard", () => {
       expect(() => {
         gameboard.placeShip(ship2, 1, 3, "horizontal");
       }).toThrow(shipsOverlappingMsg);
+    });
+
+    test("Same ship is placed twice at the same place", () => {
+      const gameboard = new Gameboard();
+      const ship1 = new Ship(1);
+      expect(() => {
+        gameboard.placeShip(ship1, 1, 1, "horizontal");
+        gameboard.placeShip(ship1, 2, 1, "horizontal");
+      }).toThrow(sameShipPlacedMsg);
     });
   });
   describe("hit method", () => {});
