@@ -66,6 +66,32 @@ describe("gameboard", () => {
       }).toThrow(SameShipPlacedError);
     });
   });
-  describe("hit method", () => {});
+  describe("hit method", () => {
+    test.each([
+      [
+        { x: 1, y: 1 },
+        { x: 10, y: 10 },
+      ],
+    ])("Hitting area inside of gameboard", ({ x, y }) => {
+      const gameboard = new Gameboard();
+      expect(() => {
+        gameboard.hit(x, y);
+      }).not.toThrow();
+    });
+
+    test.each([
+      [
+        { x: 0, y: 1 },
+        { x: 1, y: 0 },
+        { x: 11, y: 1 },
+        { x: 1, y: 11 },
+      ],
+    ])("Hitting area outside of gameboard", ({ x, y }) => {
+      const gameboard = new Gameboard();
+      expect(() => {
+        gameboard.hit(x, y);
+      }).toThrow(OutOfBoundsError);
+    });
+  });
   describe("getCell method", () => {});
 });
