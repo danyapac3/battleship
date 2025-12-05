@@ -68,4 +68,14 @@ export default class Gameboard {
     }
     this.hits[x - 1][y - 1] = true;
   }
+
+  getCell(x, y) {
+    if (x < 1 || y < 1 || x > 10 || y > 10) {
+      throw new OutOfBoundsError();
+    }
+    return {
+      ship: this.shipPositions[x - 1][y - 1],
+      isHit: this.hits[x - 1][y - 1],
+    };
+  }
 }
