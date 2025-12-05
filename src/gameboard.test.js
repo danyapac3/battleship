@@ -93,5 +93,36 @@ describe("gameboard", () => {
       }).toThrow(OutOfBoundsError);
     });
   });
-  describe("getCell method", () => {});
+  describe("getCell method", () => {
+    test("Shows whether there is ship at specified cell", () => {
+      const gameboard = new Gameboard();
+      const ship1 = new Ship(3);
+      const ship2 = new Ship(2);
+      gameboard.placeShip(ship1, 1, 1, "horizontal");
+      gameboard.placeShip(ship2, 1, 3, "vertical");
+      expect(gameboard.getCell(1, 1).ship).toBe(ship1);
+      expect(gameboard.getCell(2, 1).ship).toBe(ship1);
+      expect(gameboard.getCell(3, 1).ship).toBe(ship1);
+      expect(gameboard.getCell(1, 2).ship).toBe(null);
+      expect(gameboard.getCell(1, 3).ship).toBe(ship2);
+      expect(gameboard.getCell(1, 4).ship).toBe(ship2);
+      expect(gameboard.getCell(10, 10).ship).toBe(null);
+    });
+
+    test("Shows whether specified cell is hit", () => {
+      const gameboard = new Gameboard();
+      gameboard.hit(1, 1);
+      gameboard.hit(3, 5);
+      expect(gameboard.getCell(1, 1).isHit).toBe(true);
+      expect(gameboard.getCell(3, 5).isHit).toBe(true);
+      expect(gameboard.getCell(3, 7).isHit).toBe(false);
+    });
+
+    test("Trying to access cell out of board", () => {
+      const gameboard = new Gameboard();
+      expect(() => gameboard.getCell(0, 0)).toThrow(OutOfBoundsError);
+      expect(() => gameboard.getCell(11, 0)).toThrow(OutOfBoundsError);
+      expect(() => gameboard.getCell(0, 11)).toThrow(OutOfBoundsError);
+    });
+  });
 });
