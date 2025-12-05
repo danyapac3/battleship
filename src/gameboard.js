@@ -1,3 +1,5 @@
+const BOARD_SIZE = 10;
+
 export class OutOfBoundsError extends Error {
   constructor() {
     super("Trying to access area out of board");
@@ -30,16 +32,18 @@ export default class Gameboard {
     );
   }
 
+  #checkBounds(x, y) {
+    if ([x, y].some((coord) => coord < 1 || coord > BOARD_SIZE)) {
+      throw new OutOfBoundsError();
+    }
+  }
+
   placeShip(ship, x, y, orientation = "horizontal") {
-    if (x < 1 || y < 1 || x > 10 || y > 10) {
-      throw new OutOfBoundsError();
-    }
-    if (orientation === "horizontal" && x + ship.length - 1 > 10) {
-      throw new OutOfBoundsError();
-    }
-    if (orientation === "vertical" && y + ship.length - 1 > 10) {
-      throw new OutOfBoundsError();
-    }
+    this.#checkBounds(x, y);
+    this.#checkBounds(
+      orientation === "horizontal" ? x + ship.length : x,
+      orientation === "vertical" ? y + ship.length : y
+    );
 
     if (this.ships.includes(ship)) {
       throw new SameShipPlacedError();
@@ -63,16 +67,12 @@ export default class Gameboard {
   }
 
   hit(x, y) {
-    if (x < 1 || y < 1 || x > 10 || y > 10) {
-      throw new OutOfBoundsError();
-    }
+    this.#checkBounds(x, y);
     this.hits[x - 1][y - 1] = true;
   }
 
   getCell(x, y) {
-    if (x < 1 || y < 1 || x > 10 || y > 10) {
-      throw new OutOfBoundsError();
-    }
+    this.#checkBounds(x, y);
     return {
       ship: this.shipPositions[x - 1][y - 1],
       isHit: this.hits[x - 1][y - 1],
