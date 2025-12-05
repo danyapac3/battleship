@@ -1,18 +1,21 @@
 export class OutOfBoundsError extends Error {
   constructor() {
     super("Trying to access area out of board");
+    this.name = "OutOfBounds";
   }
 }
 
 export class ShipOverlappingError extends Error {
   constructor() {
     super("Ships mustn't overlap");
+    this.name = "ShipOverlapping";
   }
 }
 
 export class SameShipPlacedError extends Error {
   constructor() {
     super("Can't place the same ship");
+    this.name = "Can't place the same";
   }
 }
 
