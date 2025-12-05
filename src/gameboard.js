@@ -25,6 +25,9 @@ export default class Gameboard {
     this.shipPositions = Array.from({ length: 10 }).map(() =>
       Array.from({ length: 10 }).fill(null)
     );
+    this.hits = Array.from({ length: 10 }).map(() =>
+      Array.from({ length: 10 }).fill(false)
+    );
   }
 
   placeShip(ship, x, y, orientation = "horizontal") {
@@ -57,5 +60,12 @@ export default class Gameboard {
     }
 
     this.ships.push(ship);
+  }
+
+  hit(x, y) {
+    if (x < 1 || y < 1 || x > 10 || y > 10) {
+      throw new OutOfBoundsError();
+    }
+    this.hits[x - 1][y - 1] = true;
   }
 }
