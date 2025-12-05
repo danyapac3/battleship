@@ -1,6 +1,6 @@
 export class OutOfBoundsError extends Error {
   constructor() {
-    super("Ship must be placed within bounds");
+    super("Trying to access area out of board");
   }
 }
 
