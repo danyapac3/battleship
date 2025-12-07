@@ -42,7 +42,7 @@ export default class Gameboard {
   constructor() {
     this.ships = [];
     this.shipPositions = new Matrix(10, null);
-    this.hits = new Matrix(10, false);
+    this.hitPositions = new Matrix(10, false);
   }
 
   #checkBounds(x, y) {
@@ -82,14 +82,14 @@ export default class Gameboard {
 
   hit(x, y) {
     this.#checkBounds(x, y);
-    this.hits.setCell(x, y, true);
+    this.hitPositions.setCell(x, y, true);
   }
 
   getCell(x, y) {
     this.#checkBounds(x, y);
     return {
       ship: this.shipPositions.getCell(x, y),
-      isHit: this.hits.getCell(x, y),
+      isHit: this.hitPositions.getCell(x, y),
     };
   }
 }
