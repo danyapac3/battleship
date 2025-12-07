@@ -3,6 +3,7 @@ import {
   OutOfBoundsError,
   SameShipPlacedError,
   ShipOverlappingError,
+  ShipTouchError,
 } from "./gameboard.js";
 import Ship from "./ship.js";
 
@@ -57,6 +58,25 @@ describe("gameboard", () => {
       }).toThrow(ShipOverlappingError);
     });
 
+    test.each([
+      [
+        { x: 1, y: 1 },
+        { x: 2, y: 1 },
+        { x: 3, y: 1 },
+        { x: 1, y: 2 },
+        { x: 3, y: 2 },
+        { x: 1, y: 3 },
+        { x: 2, y: 3 },
+        { x: 3, y: 3 },
+      ],
+    ])("The ships touch each other", ({ x, y }) => {
+      const gameboard = new Gameboard();
+      gameboard.placeShip(new Ship(1), 2, 2, "horizontal");
+      expect(() => {
+        gameboard.placeShip(new Ship(1), x, y, "horizontal");
+      }).toThrow(ShipTouchError);
+    });
+
     test("Same ship is placed twice at the same place", () => {
       const gameboard = new Gameboard();
       const ship1 = new Ship(1);
@@ -66,6 +86,7 @@ describe("gameboard", () => {
       }).toThrow(SameShipPlacedError);
     });
   });
+
   describe("hit method", () => {
     test.each([
       [
@@ -93,6 +114,7 @@ describe("gameboard", () => {
       }).toThrow(OutOfBoundsError);
     });
   });
+
   describe("getCell method", () => {
     test("Shows whether there is ship at specified cell", () => {
       const gameboard = new Gameboard();
