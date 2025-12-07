@@ -41,12 +41,8 @@ export class SameShipPlacedError extends Error {
 export default class Gameboard {
   constructor() {
     this.ships = [];
-    this.shipPositions = Array.from({ length: 10 }).map(() =>
-      Array.from({ length: 10 }).fill(null)
-    );
-    this.hits = Array.from({ length: 10 }).map(() =>
-      Array.from({ length: 10 }).fill(false)
-    );
+    this.shipPositions = new Matrix(10, null);
+    this.hits = new Matrix(10, false);
   }
 
   #checkBounds(x, y) {
@@ -69,7 +65,7 @@ export default class Gameboard {
     for (let i = 0; i < ship.length; i++) {
       const xOffset = orientation === "horizontal" ? i : 0;
       const yOffset = orientation === "vertical" ? i : 0;
-      if (this.shipPositions[x - 1 + xOffset][y - 1 + yOffset] !== null) {
+      if (this.shipPositions.getCell(x + xOffset, y + yOffset) !== null) {
         throw new ShipOverlappingError();
       }
     }
@@ -77,7 +73,8 @@ export default class Gameboard {
     for (let i = 0; i < ship.length; i++) {
       const xOffset = orientation === "horizontal" ? i : 0;
       const yOffset = orientation === "vertical" ? i : 0;
-      this.shipPositions[x - 1 + xOffset][y - 1 + yOffset] = ship;
+
+      this.shipPositions.setCell(x + xOffset, y + yOffset, ship);
     }
 
     this.ships.push(ship);
@@ -85,14 +82,14 @@ export default class Gameboard {
 
   hit(x, y) {
     this.#checkBounds(x, y);
-    this.hits[x - 1][y - 1] = true;
+    this.hits.setCell(x, y, true);
   }
 
   getCell(x, y) {
     this.#checkBounds(x, y);
     return {
-      ship: this.shipPositions[x - 1][y - 1],
-      isHit: this.hits[x - 1][y - 1],
+      ship: this.shipPositions.getCell(x, y),
+      isHit: this.hits.getCell(x, y),
     };
   }
 }
