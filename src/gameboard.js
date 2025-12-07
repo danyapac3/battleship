@@ -1,5 +1,22 @@
 const BOARD_SIZE = 10;
 
+class Matrix {
+  #innerArray;
+  #size;
+  constructor(size, initialValue) {
+    this.#size = size;
+    this.#innerArray = new Array(size * size).fill(initialValue);
+  }
+
+  getCell(x, y) {
+    return this.#innerArray[x - 1 + (y - 1) * this.#size];
+  }
+
+  setCell(x, y, value) {
+    return (this.#innerArray[x - 1 + (y - 1) * this.#size] = value);
+  }
+}
+
 export class OutOfBoundsError extends Error {
   constructor() {
     super("Trying to access area out of board");
