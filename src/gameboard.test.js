@@ -3,7 +3,7 @@ import {
   OutOfBoundsError,
   SameShipPlacedError,
   ShipOverlappingError,
-  ShipTouchError,
+  ShipsTouchError,
 } from "./gameboard.js";
 import Ship from "./ship.js";
 
@@ -74,7 +74,7 @@ describe("gameboard", () => {
       gameboard.placeShip(new Ship(1), 2, 2, "horizontal");
       expect(() => {
         gameboard.placeShip(new Ship(1), x, y, "horizontal");
-      }).toThrow(ShipTouchError);
+      }).toThrow(ShipsTouchError);
     });
 
     test("Same ship is placed twice at the same place", () => {
