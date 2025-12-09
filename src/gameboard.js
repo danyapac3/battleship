@@ -31,6 +31,13 @@ export class ShipOverlappingError extends Error {
   }
 }
 
+export class ShipsTouchError extends Error {
+  constructor() {
+    super("Ships mustn't touch each other");
+    this.name = "ShipsTouch";
+  }
+}
+
 export class SameShipPlacedError extends Error {
   constructor() {
     super("Can't place the same ship");
