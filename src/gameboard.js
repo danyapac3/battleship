@@ -34,7 +34,7 @@ export class ShipOverlappingError extends Error {
 export class SameShipPlacedError extends Error {
   constructor() {
     super("Can't place the same ship");
-    this.name = "Can't place the same";
+    this.name = "SameShipPlaced";
   }
 }
 
