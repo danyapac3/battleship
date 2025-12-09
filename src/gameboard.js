@@ -24,10 +24,10 @@ export class OutOfBoundsError extends Error {
   }
 }
 
-export class ShipOverlappingError extends Error {
+export class ShipsOverlapError extends Error {
   constructor() {
-    super("Ships mustn't overlap");
-    this.name = "ShipOverlapping";
+    super("Ships mustn't overlap each other");
+    this.name = "ShipsOverlap";
   }
 }
 
@@ -73,7 +73,7 @@ export default class Gameboard {
       const xOffset = orientation === "horizontal" ? i : 0;
       const yOffset = orientation === "vertical" ? i : 0;
       if (this.shipPositions.getCell(x + xOffset, y + yOffset) !== null) {
-        throw new ShipOverlappingError();
+        throw new ShipsOverlapError();
       }
     }
 

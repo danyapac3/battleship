@@ -2,7 +2,7 @@ import Gameboard from "./gameboard.js";
 import {
   OutOfBoundsError,
   SameShipPlacedError,
-  ShipOverlappingError,
+  ShipsOverlapError,
   ShipsTouchError,
 } from "./gameboard.js";
 import Ship from "./ship.js";
@@ -44,7 +44,7 @@ describe("gameboard", () => {
       gameboard.placeShip(ship1, 1, 1, "horizontal");
       expect(() => {
         gameboard.placeShip(ship2, 1, 1, "horizontal");
-      }).toThrow(ShipOverlappingError);
+      }).toThrow(ShipsOverlapError);
     });
 
     test("Long ships are overlapping", () => {
@@ -55,7 +55,7 @@ describe("gameboard", () => {
       gameboard.placeShip(ship1, 3, 1, "vertical");
       expect(() => {
         gameboard.placeShip(ship2, 1, 3, "horizontal");
-      }).toThrow(ShipOverlappingError);
+      }).toThrow(ShipsOverlapError);
     });
 
     test.each([
