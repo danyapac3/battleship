@@ -115,6 +115,16 @@ describe("gameboard", () => {
   });
 
   describe("getCell method", () => {
+    test("Shows empty cells", () => {
+      const gameboard = new Gameboard();
+      const ship1 = new Ship(3);
+      const ship2 = new Ship(2);
+      gameboard.placeShip(ship1, 1, 1, "horizontal");
+      gameboard.placeShip(ship2, 1, 3, "vertical");
+      expect(gameboard.getCell(1, 2).ship).toBe(null);
+      expect(gameboard.getCell(10, 10).ship).toBe(null);
+    });
+
     test("Shows whether there is ship at specified cell", () => {
       const gameboard = new Gameboard();
       const ship1 = new Ship(3);
@@ -124,10 +134,8 @@ describe("gameboard", () => {
       expect(gameboard.getCell(1, 1).ship).toBe(ship1);
       expect(gameboard.getCell(2, 1).ship).toBe(ship1);
       expect(gameboard.getCell(3, 1).ship).toBe(ship1);
-      expect(gameboard.getCell(1, 2).ship).toBe(null);
       expect(gameboard.getCell(1, 3).ship).toBe(ship2);
       expect(gameboard.getCell(1, 4).ship).toBe(ship2);
-      expect(gameboard.getCell(10, 10).ship).toBe(null);
     });
 
     test("Shows whether specified cell is hit", () => {
