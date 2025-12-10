@@ -45,6 +45,10 @@ export default class Gameboard {
     this.hitPositions = new Matrix(10, false);
   }
 
+  #isWithinBounds(x, y) {
+    return [x, y].every((coord) => coord >= 1 && coord <= BOARD_SIZE);
+  }
+
   #checkBounds(x, y) {
     if ([x, y].some((coord) => coord < 1 || coord > BOARD_SIZE)) {
       throw new OutOfBoundsError();
@@ -63,11 +67,31 @@ export default class Gameboard {
     }
 
     for (let i = 0; i < ship.length; i++) {
-      const xOffset = orientation === "horizontal" ? i : 0;
-      const yOffset = orientation === "vertical" ? i : 0;
-      if (this.shipPositions.getCell(x + xOffset, y + yOffset) !== null) {
-        throw new ShipsOverlapError();
-      }
+      const shipCellX = x + (orientation === "horizontal" ? i : 0);
+      const shipCellY = y + (orientation === "vertical" ? i : 0);
+      const rectPattern = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 0],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+      ];
+
+      rectPattern.forEach(([xOffset, yOffset]) => {
+        const currentX = shipCellX + xOffset;
+        const currentY = shipCellY + yOffset;
+        if (!this.#isWithinBounds(currentX, currentY)) {
+          return;
+        }
+
+        if (this.shipPositions.getCell(currentX, currentY) !== null) {
+          throw new ShipsOverlapError();
+        }
+      });
     }
 
     for (let i = 0; i < ship.length; i++) {
