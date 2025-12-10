@@ -58,8 +58,8 @@ export default class Gameboard {
   placeShip(ship, x, y, orientation = "horizontal") {
     this.#checkBounds(x, y);
     this.#checkBounds(
-      orientation === "horizontal" ? x + ship.length : x,
-      orientation === "vertical" ? y + ship.length : y
+      orientation === "horizontal" ? x + ship.length - 1 : x,
+      orientation === "vertical" ? y + ship.length - 1 : y
     );
 
     if (this.ships.includes(ship)) {
