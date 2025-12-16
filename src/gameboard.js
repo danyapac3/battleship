@@ -38,6 +38,13 @@ export class SameShipPlacedError extends Error {
   }
 }
 
+export class HitSameCellError extends Error {
+  constructor(x, y) {
+    super(`Can't hit cell twice x: ${x}, y: ${y}`);
+    this.name = "HitSameCellError";
+  }
+}
+
 export default class Gameboard {
   constructor() {
     this.ships = [];
@@ -105,6 +112,9 @@ export default class Gameboard {
   }
 
   hit(x, y) {
+    if (this.getCell(x, y).isHit) {
+      throw new HitSameCellError(x, y);
+    }
     this.#checkBounds(x, y);
     this.hitPositions.setCell(x, y, true);
   }
