@@ -3,6 +3,7 @@ import {
   OutOfBoundsError,
   SameShipPlacedError,
   ShipsOverlapError,
+  HitSameCellError,
 } from "./gameboard.js";
 import Ship from "./ship.js";
 
@@ -87,6 +88,13 @@ describe("gameboard", () => {
   });
 
   describe("hit method", () => {
+    test("hit cell at same possition", () => {
+      const gameboard = new Gameboard();
+      gameboard.hit(1, 1);
+      gameboard.hit(10, 10);
+      expect(() => gameboard.hit(1, 1)).toThrow(HitSameCellError);
+      expect(() => gameboard.hit(10, 10)).toThrow(HitSameCellError);
+    });
     test.each([
       [
         { x: 1, y: 1 },
