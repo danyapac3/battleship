@@ -1,0 +1,26 @@
+import "./event-handlers/toggle-player-button";
+
+import Gameboard from "./gameboard";
+import Player from "./player";
+import Ship from "./ship";
+
+import * as gameState from "./states/game";
+import * as screenController from "./screen";
+
+async function main() {
+  const gameboard1 = new Gameboard();
+  const gameboard2 = new Gameboard();
+
+  gameboard1.placeShip(new Ship(1), 1, 1, "horizontal");
+  gameboard1.placeShip(new Ship(1), 10, 10, "horizontal");
+  gameboard2.placeShip(new Ship(1), 1, 2, "horizontal");
+
+  const player1 = new Player("p1", gameboard1);
+  const player2 = new Player("p2", gameboard2);
+
+  gameState.init(player1, player2);
+
+  screenController.update();
+}
+
+main();
