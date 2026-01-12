@@ -72,6 +72,22 @@ body {
   grid-row: var(--y);
 }
 
+.current-enemy-board {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  place-items: center;
+}
+
+.hit-cell {
+  background-color: gray;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  grid-column: var(--x);
+  grid-row: var(--y);
+}
+
 .toggle-player {
   position: absolute;
   bottom: 10px;
