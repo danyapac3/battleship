@@ -1,4 +1,4 @@
-import Matrix from "./utils/matrix";
+import Matrix from "../utils/matrix";
 
 const BOARD_SIZE = 10;
 

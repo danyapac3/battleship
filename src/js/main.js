@@ -1,8 +1,8 @@
 import "./event-handlers/toggle-player-button";
 
-import Gameboard from "./gameboard";
-import Player from "./player";
-import Ship from "./ship";
+import Gameboard from "./game/gameboard";
+import Player from "./game/player";
+import Ship from "./game/ship";
 
 import * as gameState from "./states/game";
 import * as screenController from "./screen";
