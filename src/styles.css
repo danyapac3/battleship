@@ -55,23 +55,7 @@ body {
     calc(-1 * calc(var(--line-width) / 2));
 }
 
-.current-player-board {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-  place-items: center;
-}
-
-.ship-cell {
-  background-color: rgb(143, 246, 0);
-  width: 50px;
-  height: 50px;
-  border: 3px solid gray;
-  border-radius: 5px;
-  grid-column: var(--x);
-  grid-row: var(--y);
-}
-
+.current-player-board,
 .current-enemy-board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
@@ -79,13 +63,24 @@ body {
   place-items: center;
 }
 
-.hit-cell {
+.cell {
+  grid-column: var(--x);
+  grid-row: var(--y);
+}
+
+.cell.hit {
   background-color: gray;
   width: 10px;
   height: 10px;
   border-radius: 5px;
-  grid-column: var(--x);
-  grid-row: var(--y);
+}
+
+.cell.ship {
+  background-color: rgb(143, 246, 0);
+  width: 50px;
+  height: 50px;
+  border: 3px solid gray;
+  border-radius: 5px;
 }
 
 .toggle-player {

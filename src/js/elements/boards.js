@@ -3,22 +3,13 @@ import * as gameState from "../states/game";
 const playerBoardSelector = ".current-player-board";
 const enemyBoardSelector = ".current-enemy-board";
 
-function createHitCellElement(x, y) {
+function createCellElement(classes, x, y) {
   const cell = document.createElement("div");
-  cell.classList.add("hit-cell");
+  cell.classList.add("cell", ...classes);
   cell.style.setProperty("--x", x);
   cell.style.setProperty("--y", y);
 
   return cell;
-}
-
-function createShipCellElement(x, y) {
-  const ship = document.createElement("div");
-  ship.classList.add("ship-cell");
-  ship.style.setProperty("--x", x);
-  ship.style.setProperty("--y", y);
-
-  return ship;
 }
 
 function updateBoard(selector, board, cellFactory) {
@@ -38,7 +29,7 @@ export function updateEnemyBoard() {
   updateBoard(
     enemyBoardSelector,
     gameState.getCurrentEnemy().gameboard.hitPositions,
-    createHitCellElement
+    createCellElement.bind(null, ["hit"])
   );
 }
 
@@ -46,7 +37,7 @@ export function updatePlayerBoard() {
   updateBoard(
     playerBoardSelector,
     gameState.getCurrentPlayer().gameboard.shipPositions,
-    createShipCellElement
+    createCellElement.bind(null, ["ship"])
   );
 }
 
