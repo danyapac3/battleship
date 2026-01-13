@@ -1,7 +1,7 @@
 import * as gameState from "../states/game";
 
-const playerBoardSelector = ".current-player-board";
-const enemyBoardSelector = ".current-enemy-board";
+const playerBoardSelector = ".player-board";
+const enemyBoardSelector = ".enemy-board";
 
 function createCellElement(classes, x, y) {
   const cell = document.createElement("div");

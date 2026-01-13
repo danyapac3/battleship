@@ -55,8 +55,8 @@ body {
     calc(-1 * calc(var(--line-width) / 2));
 }
 
-.current-player-board,
-.current-enemy-board {
+.player-board,
+.enemy-board {
   display: grid;
   grid-template-columns: repeat(10, 1fr);
   grid-template-rows: repeat(10, 1fr);
