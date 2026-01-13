@@ -26,11 +26,25 @@ function updateBoard(selector, board, cellFactory) {
 }
 
 export function updateEnemyBoard() {
-  updateBoard(
-    enemyBoardSelector,
-    gameState.getCurrentEnemy().gameboard.hitPositions,
-    createCellElement.bind(null, ["hit"])
-  );
+  const enemy = gameState.getCurrentEnemy();
+  const { gameboard } = enemy;
+
+  const children = [];
+  gameboard.hitPositions.forEach((isHit, x, y) => {
+    if (!isHit) {
+      return;
+    }
+
+    const cell = createCellElement(["hit"], x, y);
+    const isShip = !!gameboard.getCell(x, y).ship;
+    if (isShip) {
+      cell.classList.add("ship");
+    }
+    children.push(cell);
+  });
+
+  const boardElement = document.querySelector(enemyBoardSelector);
+  boardElement.replaceChildren(...children);
 }
 
 export function updatePlayerBoard() {

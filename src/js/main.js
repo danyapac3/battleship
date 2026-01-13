@@ -16,6 +16,7 @@ async function main() {
   gameboard2.placeShip(new Ship(1), 1, 2, "horizontal");
   gameboard1.hit(10, 10);
   gameboard2.hit(1, 1);
+  gameboard2.hit(1, 2);
 
   const player1 = new Player("p1", gameboard1);
   const player2 = new Player("p2", gameboard2);

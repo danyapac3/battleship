@@ -83,6 +83,21 @@ body {
   border-radius: 5px;
 }
 
+.cell.ship.hit {
+  background-color: red;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.cell.ship.hit::after {
+  content: "";
+  background-color: gray;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+}
+
 .toggle-player {
   position: absolute;
   bottom: 10px;
