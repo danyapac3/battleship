@@ -23,23 +23,22 @@ function getCellElementInPosition(board, x, y) {
   return board.children[x - 1 + (y - 1) * 10];
 }
 
-function updatePlayerBoard() {
-  const { shipPositions } = gameState.getCurrentPlayer().gameboard;
-  shipPositions.forEach((ship, x, y) => {
-    const cellElement = getCellElementInPosition(playerBoard, x, y);
-    cellElement.classList.toggle("ship", !!ship);
-  });
-}
-
-function updateEnemyBoard() {
-  const { shipPositions } = gameState.getCurrentEnemy().gameboard;
-  const { hitPositions } = gameState.getCurrentEnemy().gameboard;
+function updateBoard(boardElement, board) {
+  const { hitPositions, shipPositions } = board;
 
   hitPositions.forEach((isHit, x, y) => {
-    const cellElement = getCellElementInPosition(enemyBoard, x, y);
+    const cellElement = getCellElementInPosition(boardElement, x, y);
     cellElement.classList.toggle("ship", !!shipPositions.getCell(x, y));
     cellElement.classList.toggle("hit", isHit);
   });
+}
+
+function updatePlayerBoard() {
+  updateBoard(playerBoard, gameState.getCurrentPlayer().gameboard);
+}
+
+function updateEnemyBoard() {
+  updateBoard(enemyBoard, gameState.getCurrentEnemy().gameboard);
 }
 
 export function update() {
