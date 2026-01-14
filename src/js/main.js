@@ -1,5 +1,7 @@
 import "./event-handlers/toggle-player-button";
 
+import * as boards from "./elements/boards";
+
 import Gameboard from "./game/gameboard";
 import Player from "./game/player";
 import Ship from "./game/ship";
@@ -23,6 +25,7 @@ async function main() {
 
   gameState.init(player1, player2);
 
+  boards.init();
   screenController.update();
 }
 
