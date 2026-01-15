@@ -14,6 +14,13 @@ function createCellElement(x, y) {
   return cell;
 }
 
+function hideBoardCells(boardElement) {
+  const cells = boardElement.querySelectorAll(".cell");
+  for (let i = 0; i < cells.length; i++) {
+    cells[i].classList.remove("ship", "hit");
+  }
+}
+
 export function init() {
   for (let y = 1; y <= 10; y++) {
     for (let x = 1; x <= 10; x++) {
@@ -49,6 +56,10 @@ function updatePlayerBoard() {
 
 function updateEnemyBoard() {
   updateBoard(enemyBoard, gameState.getCurrentEnemy().gameboard, true);
+}
+
+export function hidePlayerBoard() {
+  hideBoardCells(playerBoard);
 }
 
 export function update() {

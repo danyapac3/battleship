@@ -1,4 +1,5 @@
 import * as screen from "../screen";
+import { hidePlayerBoard } from "../elements/boards";
 import * as passDeviceToOpponentPopup from "../elements/pass-device-to-opponent-popup";
 
 let players = null;
@@ -38,9 +39,8 @@ export function playTurn(x, y) {
   }
 
   screen.update();
+  passDeviceToOpponentPopup.waitShow().then(hidePlayerBoard);
+  passDeviceToOpponentPopup.waitClose().then(togglePlayer);
   passDeviceToOpponentPopup.show();
-  passDeviceToOpponentPopup.waitClose().then(() => {
-    togglePlayer();
-  });
   return true;
 }
