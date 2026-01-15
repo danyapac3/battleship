@@ -1,4 +1,5 @@
 import * as screen from "../screen";
+import * as passDeviceToOpponentPopup from "../elements/pass-device-to-opponent-popup";
 
 let players = null;
 let currentPlayer = null;
@@ -36,6 +37,10 @@ export function playTurn(x, y) {
     return false;
   }
 
-  togglePlayer();
+  screen.update();
+  passDeviceToOpponentPopup.show();
+  passDeviceToOpponentPopup.waitClose().then(() => {
+    togglePlayer();
+  });
   return true;
 }
