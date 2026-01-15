@@ -27,11 +27,17 @@ function getCellElementInPosition(board, x, y) {
   return board.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
 }
 
-function updateBoard(boardElement, board) {
+function updateBoard(boardElement, board, hideUntouchedShipCells) {
   const { hitPositions, shipPositions } = board;
 
   hitPositions.forEach((isHit, x, y) => {
     const cellElement = getCellElementInPosition(boardElement, x, y);
+
+    if (hideUntouchedShipCells && !isHit) {
+      cellElement.classList.remove("ship", "hit");
+      return;
+    }
+
     cellElement.classList.toggle("ship", !!shipPositions.getCell(x, y));
     cellElement.classList.toggle("hit", isHit);
   });
@@ -42,7 +48,7 @@ function updatePlayerBoard() {
 }
 
 function updateEnemyBoard() {
-  updateBoard(enemyBoard, gameState.getCurrentEnemy().gameboard);
+  updateBoard(enemyBoard, gameState.getCurrentEnemy().gameboard, true);
 }
 
 export function update() {
