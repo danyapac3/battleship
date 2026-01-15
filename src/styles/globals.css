@@ -1,0 +1,6 @@
+:root {
+  --primary-color: rgb(67, 233, 67);
+  --secondary-color: black;
+  --player-color: var(--primary-color);
+  --enemy-color: rgb(233, 67, 67);
+}
