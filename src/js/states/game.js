@@ -24,5 +24,18 @@ export function getCurrentEnemy() {
 
 export function togglePlayer() {
   currentPlayer = currentPlayer === players[0] ? players[1] : players[0];
+  currentEnemy = currentPlayer === players[0] ? players[1] : players[0];
   screen.update();
+}
+
+// hits enemy board in specified coordinates and turns current player;
+export function playTurn(x, y) {
+  try {
+    currentEnemy.gameboard.hit(x, y);
+  } catch (err) {
+    return false;
+  }
+
+  togglePlayer();
+  return true;
 }

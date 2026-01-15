@@ -1,4 +1,5 @@
 import "./event-handlers/toggle-player-button";
+import "./event-handlers/enemy-board";
 
 import * as boards from "./elements/boards";
 

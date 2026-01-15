@@ -1,5 +1,15 @@
-const selector = ".enemy-board";
+import * as gameState from "../states/game";
+import { enemyBoard as board } from "../elements/boards";
 
-const board = document.querySelector(selector);
+board.addEventListener("click", ({ target }) => {
+  if (!target.classList.contains("cell")) {
+    return;
+  }
 
-board.addEventListener("click", () => {});
+  const cell = target;
+
+  const x = parseInt(cell.dataset.x);
+  const y = parseInt(cell.dataset.y);
+
+  gameState.playTurn(x, y);
+});

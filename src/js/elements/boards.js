@@ -3,24 +3,28 @@ import * as gameState from "../states/game";
 const playerBoardSelector = ".player-board";
 const enemyBoardSelector = ".enemy-board";
 
-const playerBoard = document.querySelector(playerBoardSelector);
-const enemyBoard = document.querySelector(enemyBoardSelector);
+export const playerBoard = document.querySelector(playerBoardSelector);
+export const enemyBoard = document.querySelector(enemyBoardSelector);
 
-function createCellElement() {
+function createCellElement(x, y) {
   const cell = document.createElement("div");
   cell.classList.add("cell");
+  cell.dataset.x = x;
+  cell.dataset.y = y;
   return cell;
 }
 
 export function init() {
-  for (let i = 0; i < 10 * 10; i++) {
-    playerBoard.appendChild(createCellElement());
-    enemyBoard.appendChild(createCellElement());
+  for (let y = 1; y <= 10; y++) {
+    for (let x = 1; x <= 10; x++) {
+      playerBoard.appendChild(createCellElement(x, y));
+      enemyBoard.appendChild(createCellElement(x, y));
+    }
   }
 }
 
 function getCellElementInPosition(board, x, y) {
-  return board.children[x - 1 + (y - 1) * 10];
+  return board.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
 }
 
 function updateBoard(boardElement, board) {
