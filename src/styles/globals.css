@@ -3,4 +3,5 @@
   --secondary-color: black;
   --player-color: var(--primary-color);
   --enemy-color: rgb(233, 67, 67);
+  --transparent: #00000000;
 }
