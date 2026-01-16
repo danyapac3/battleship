@@ -1,4 +1,3 @@
-import "./event-handlers/toggle-player-button";
 import "./event-handlers/enemy-board";
 import "./event-handlers/pass-device-to-opponent-popup";
 
