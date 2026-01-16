@@ -11,21 +11,23 @@ import Ship from "./game/ship";
 import * as gameState from "./states/game";
 import * as screenController from "./screen";
 
+function createPlayer(name) {
+  const gameboard = new Gameboard();
+  gameboard.placeShip(new Ship(1), 6, 3);
+  gameboard.placeShip(new Ship(1), 6, 5);
+  gameboard.placeShip(new Ship(1), 8, 9);
+  gameboard.placeShip(new Ship(1), 10, 9);
+  gameboard.placeShip(new Ship(2), 1, 1, "vertical");
+  gameboard.placeShip(new Ship(2), 2, 4, "horizontal");
+  gameboard.placeShip(new Ship(2), 3, 10, "horizontal");
+  gameboard.placeShip(new Ship(3), 2, 6, "horizontal");
+  gameboard.placeShip(new Ship(3), 3, 8, "horizontal");
+  gameboard.placeShip(new Ship(4), 8, 2, "vertical");
+  return new Player(name, gameboard);
+}
+
 async function main() {
-  const gameboard1 = new Gameboard();
-  const gameboard2 = new Gameboard();
-
-  gameboard1.placeShip(new Ship(1), 1, 1, "horizontal");
-  gameboard1.placeShip(new Ship(1), 10, 10, "horizontal");
-  gameboard2.placeShip(new Ship(1), 1, 2, "horizontal");
-  gameboard1.hit(10, 10);
-  gameboard2.hit(1, 1);
-  gameboard2.hit(1, 2);
-
-  const player1 = new Player("p1", gameboard1);
-  const player2 = new Player("p2", gameboard2);
-
-  gameState.init(player1, player2);
+  gameState.init(createPlayer("p1"), createPlayer("p2"));
 
   boards.init();
   screenController.update();
