@@ -51,7 +51,7 @@ export default class Gameboard {
     this.#checkBounds(x, y);
     this.#checkBounds(
       orientation === "horizontal" ? x + ship.length - 1 : x,
-      orientation === "vertical" ? y + ship.length - 1 : y
+      orientation === "vertical" ? y + ship.length - 1 : y,
     );
 
     if (this.ships.includes(ship)) {
@@ -102,6 +102,7 @@ export default class Gameboard {
     }
     this.#checkBounds(x, y);
     this.hitPositions.setCell(x, y, true);
+    this.getCell(x, y).ship?.hit();
   }
 
   getCell(x, y) {
