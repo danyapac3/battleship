@@ -87,6 +87,19 @@ describe("gameboard", () => {
     });
   });
 
+  describe("ships property", () => {
+    test('Placed ships are accessible using "ships" property', () => {
+      const gameboard = new Gameboard();
+      const ship1 = new Ship(1);
+      const ship2 = new Ship(1);
+
+      gameboard.placeShip(ship1, 1, 1);
+      gameboard.placeShip(ship2, 1, 3);
+      expect(gameboard.ships.includes(ship1));
+      expect(gameboard.ships.includes(ship2));
+    });
+  });
+
   describe("hit method", () => {
     test("hit cell at same possition", () => {
       const gameboard = new Gameboard();
@@ -121,18 +134,13 @@ describe("gameboard", () => {
         gameboard.hit(x, y);
       }).toThrow(OutOfBoundsError);
     });
-  });
 
-  describe("ships property", () => {
-    test('Placed ships are accessible using "ships" property', () => {
+    test("Placed ships receive hits", () => {
       const gameboard = new Gameboard();
-      const ship1 = new Ship(1);
-      const ship2 = new Ship(1);
-
-      gameboard.placeShip(ship1, 1, 1);
-      gameboard.placeShip(ship2, 1, 3);
-      expect(gameboard.ships.includes(ship1));
-      expect(gameboard.ships.includes(ship2));
+      const ship = new Ship(1);
+      gameboard.placeShip(ship, 1, 1);
+      gameboard.hit(1, 1);
+      expect(ship.isSunk()).toBe(true);
     });
   });
 
@@ -169,7 +177,7 @@ describe("gameboard", () => {
       expect(gameboard.getCell(3, 7).isHit).toBe(false);
     });
 
-    test("Trying to access cell out of board", () => {
+    test("Trying to acces s cell out of board", () => {
       const gameboard = new Gameboard();
       expect(() => gameboard.getCell(0, 0)).toThrow(OutOfBoundsError);
       expect(() => gameboard.getCell(11, 0)).toThrow(OutOfBoundsError);
