@@ -12,7 +12,7 @@ describe("gameboard", () => {
     test("place a ship in correct place", () => {
       const gameboard = new Gameboard();
       expect(() =>
-        gameboard.placeShip(new Ship(1), 1, 1, "vertical")
+        gameboard.placeShip(new Ship(1), 1, 1, "vertical"),
       ).not.toThrow();
     });
 
@@ -95,6 +95,7 @@ describe("gameboard", () => {
       expect(() => gameboard.hit(1, 1)).toThrow(HitSameCellError);
       expect(() => gameboard.hit(10, 10)).toThrow(HitSameCellError);
     });
+
     test.each([
       [
         { x: 1, y: 1 },
@@ -119,6 +120,19 @@ describe("gameboard", () => {
       expect(() => {
         gameboard.hit(x, y);
       }).toThrow(OutOfBoundsError);
+    });
+  });
+
+  describe("ships property", () => {
+    test('Placed ships are accessible using "ships" property', () => {
+      const gameboard = new Gameboard();
+      const ship1 = new Ship(1);
+      const ship2 = new Ship(1);
+
+      gameboard.placeShip(ship1, 1, 1);
+      gameboard.placeShip(ship2, 1, 3);
+      expect(gameboard.ships.includes(ship1));
+      expect(gameboard.ships.includes(ship2));
     });
   });
 
