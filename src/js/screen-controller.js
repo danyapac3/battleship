@@ -1,7 +1,7 @@
-import Game from "./game/game";
-import Gameboard from "./game/gameboard";
-import Player from "./game/player";
-import Ship from "./game/ship";
+import Game from "./core/game";
+import Gameboard from "./core/gameboard";
+import Player from "./core/player";
+import Ship from "./core/ship";
 
 import * as boards from "./elements/boards";
 
