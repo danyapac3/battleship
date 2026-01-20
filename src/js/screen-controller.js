@@ -36,8 +36,13 @@ export default async function ScreenController() {
 
   while (true) {
     const { x, y } = await enemyBoard.waitClick();
-    if (game.playRound(x, y)) {
-      updateBoards(game);
+    const isRoundPlayed = game.playRound(x, y);
+    if (isRoundPlayed) {
+      const winner = game.getWinner();
+      if (winner) {
+        alert(`${winner.name} is a winner! Congratulations!!!`);
+      }
     }
+    updateBoards(game);
   }
 }
