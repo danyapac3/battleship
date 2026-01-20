@@ -29,11 +29,7 @@ function updateBoards(game) {
   enemyBoard.update(game.getCurrentEnemy().gameboard);
 }
 
-export default async function ScreenController() {
-  initBoards();
-  const game = createGame();
-  updateBoards(game);
-
+async function playGame(game) {
   while (true) {
     const { x, y } = await enemyBoard.waitClick();
     const isRoundPlayed = game.playRound(x, y);
@@ -41,8 +37,18 @@ export default async function ScreenController() {
       const winner = game.getWinner();
       if (winner) {
         alert(`${winner.name} is a winner! Congratulations!!!`);
+        return;
       }
     }
     updateBoards(game);
+  }
+}
+
+export default async function ScreenController() {
+  initBoards();
+  while (true) {
+    const game = createGame();
+    updateBoards(game);
+    await playGame(game);
   }
 }
