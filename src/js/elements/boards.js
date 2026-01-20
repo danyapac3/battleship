@@ -1,5 +1,3 @@
-import * as gameState from "../states/game";
-
 const playerBoardSelector = ".player-board";
 const enemyBoardSelector = ".enemy-board";
 
