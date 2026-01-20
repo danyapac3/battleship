@@ -24,7 +24,13 @@ function createGame() {
   return new Game(createPlayer("player1"), createPlayer("player2"));
 }
 
+function updateBoards(game) {
+  boards.updatePlayerBoard(game.getCurrentPlayer().gameboard);
+  boards.updateEnemyBoard(game.getCurrentEnemy().gameboard);
+}
+
 export default function ScreenController() {
   boards.init();
   const game = createGame();
+  updateBoards(game);
 }
