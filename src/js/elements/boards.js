@@ -1,16 +1,31 @@
 const playerBoardSelector = ".player-board";
 const enemyBoardSelector = ".enemy-board";
 
-export const playerBoard = document.querySelector(playerBoardSelector);
-export const enemyBoard = document.querySelector(enemyBoardSelector);
+export const playerBoardElement = document.querySelector(playerBoardSelector);
+export const enemyBoardElement = document.querySelector(enemyBoardSelector);
+
+let enemyBoardClickResolver = null;
+let enemyBoardClickPromise = null;
 
 export function init() {
   for (let y = 1; y <= 10; y++) {
     for (let x = 1; x <= 10; x++) {
-      playerBoard.appendChild(createCellElement(x, y));
-      enemyBoard.appendChild(createCellElement(x, y));
+      playerBoardElement.appendChild(createCellElement(x, y));
+      enemyBoardElement.appendChild(createCellElement(x, y));
     }
   }
+
+  enemyBoardElement.addEventListener("click", ({ target }) => {
+    if (target.classList.contains("cell")) {
+      const coordinates = {
+        x: parseInt(target.dataset.x),
+        y: parseInt(target.dataset.y),
+      };
+      enemyBoardClickResolver?.(coordinates);
+      enemyBoardClickResolver = null;
+      enemyBoardClickPromise = null;
+    }
+  });
 }
 
 function createCellElement(x, y) {
@@ -49,13 +64,24 @@ function updateBoard(boardElement, board, hideUntouchedShipCells) {
 }
 
 export function hidePlayerBoard() {
-  hideBoardCells(playerBoard);
+  hideBoardCells(playerBoardElement);
 }
 
-export function updatePlayerBoard(gameboard) {
-  updateBoard(playerBoard, gameboard);
+export function waitEnemyBoardClick() {
+  return (enemyBoardClickPromise ||= new Promise((resolve) => {
+    enemyBoardClickResolver = resolve;
+  }));
 }
 
-export function updateEnemyBoard(gameboard) {
-  updateBoard(enemyBoard, gameboard, true);
-}
+export const playerBoard = {
+  update: (gameboard) => updateBoard(playerBoardElement, gameboard),
+};
+
+export const enemyBoard = {
+  update: (gameboard) => updateBoard(enemyBoardElement, gameboard, true),
+  waitClick: () => {
+    return (enemyBoardClickPromise ||= new Promise((resolve) => {
+      enemyBoardClickResolver = resolve;
+    }));
+  },
+};

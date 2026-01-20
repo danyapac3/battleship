@@ -3,7 +3,7 @@ import Gameboard from "./core/gameboard";
 import Player from "./core/player";
 import Ship from "./core/ship";
 
-import * as boards from "./elements/boards";
+import { playerBoard, enemyBoard, init as initBoards } from "./elements/boards";
 
 function createPlayer(name) {
   const gameboard = new Gameboard();
@@ -25,12 +25,19 @@ function createGame() {
 }
 
 function updateBoards(game) {
-  boards.updatePlayerBoard(game.getCurrentPlayer().gameboard);
-  boards.updateEnemyBoard(game.getCurrentEnemy().gameboard);
+  playerBoard.update(game.getCurrentPlayer().gameboard);
+  enemyBoard.update(game.getCurrentEnemy().gameboard);
 }
 
-export default function ScreenController() {
-  boards.init();
+export default async function ScreenController() {
+  initBoards();
   const game = createGame();
   updateBoards(game);
+
+  while (true) {
+    const { x, y } = await enemyBoard.waitClick();
+    if (game.playRound(x, y)) {
+      updateBoards(game);
+    }
+  }
 }
