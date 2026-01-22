@@ -1,0 +1,26 @@
+.ship-placement-screen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.ship-placement-screen[hidden] {
+  display: none;
+}
+
+.ship-placement-screen__board {
+}
+
+.ship-placement-screen__ships-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ship-placement-screen__ship {
+  height: 32px;
+  width: calc(calc(attr(data-length px) * 32) + attr(data-length px));
+  background-color: green;
+}

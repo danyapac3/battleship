@@ -4,6 +4,7 @@ import Player from "./core/player";
 import Ship from "./core/ship";
 
 import { playerBoard, enemyBoard, init as initBoards } from "./elements/boards";
+import * as shipPlacementScreen from "./elements/ship-placement-screen";
 
 function createPlayer(name) {
   const gameboard = new Gameboard();
@@ -45,6 +46,8 @@ async function playGame(game) {
 }
 
 export default async function ScreenController() {
+  shipPlacementScreen.init();
+  const gameboard1 = await shipPlacementScreen.waitGameboard();
   initBoards();
   while (true) {
     const game = createGame();
