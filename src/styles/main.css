@@ -9,7 +9,7 @@ body {
   position: relative;
 }
 
-body:after {
+/* body:after {
   content: "";
   position: absolute;
   width: 100%;
@@ -35,7 +35,7 @@ body:after {
     100% 1%,
     100% 100%;
   filter: sepia(60%);
-}
+} */
 
 .main-title {
   margin-top: 20px;

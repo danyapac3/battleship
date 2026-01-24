@@ -47,7 +47,7 @@ async function playGame(game) {
 
 export default async function ScreenController() {
   shipPlacementScreen.init();
-  const gameboard1 = await shipPlacementScreen.waitGameboard();
+  const gameboard = await shipPlacementScreen.waitGameboard();
   initBoards();
   while (true) {
     const game = createGame();

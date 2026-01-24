@@ -24,3 +24,9 @@
   width: calc(calc(attr(data-length px) * 32) + attr(data-length px));
   background-color: green;
 }
+
+.ship-placement-screen__ship:focus {
+  outline: 5px solid white;
+  height: 40px;
+  width: calc(calc(attr(data-length px) * 40) + attr(data-length px));
+}
