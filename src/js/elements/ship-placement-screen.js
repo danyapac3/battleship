@@ -59,7 +59,15 @@ export function init() {
     const x = parseInt(target.dataset.x);
     const y = parseInt(target.dataset.y);
     const ship = elementToShip.get(prevFocusedShip);
-    gameboard.placeShip(ship, x, y);
+
+    try {
+      gameboard.placeShip(ship, x, y);
+    } catch {
+      return;
+    }
+
+    shipsList.removeChild(prevFocusedShip);
+    prevFocusedShip = null;
     update(gameboard);
   });
 }
