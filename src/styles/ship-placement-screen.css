@@ -1,7 +1,9 @@
 .ship-placement-screen {
   height: 100%;
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-areas: "left-side center right-side";
+  grid-template-columns: 1fr auto 1fr;
+  justify-items: center;
   align-items: center;
   gap: 30px;
 }
@@ -11,9 +13,12 @@
 }
 
 .ship-placement-screen__board {
+  grid-area: center;
 }
 
 .ship-placement-screen__ships-list {
+  grid-area: left-side;
+  height: 500px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -26,7 +31,5 @@
 }
 
 .ship-placement-screen__ship:focus {
-  outline: 5px solid white;
-  height: 40px;
-  width: calc(calc(attr(data-length px) * 40) + attr(data-length px));
+  border: 5px solid white;
 }
