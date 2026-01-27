@@ -34,6 +34,14 @@ function getCellElementInPosition(board, x, y) {
   return board.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
 }
 
+function addShipToList(ship) {
+  const shipElement = createShipElement(ship);
+  shipElement.addEventListener("focus", () => {
+    prevFocusedShip = shipElement;
+  });
+  shipsList.appendChild(shipElement);
+}
+
 function update(gameboard) {
   gameboard.forEachCell(({ x, y, ship }) => {
     const cellElement = getCellElementInPosition(board, x, y);
@@ -73,6 +81,7 @@ export function init() {
       if (ship) {
         gameboard.removeShip(ship);
       }
+      addShipToList(ship);
     }
 
     update(gameboard);
@@ -85,13 +94,6 @@ export function init() {
 export async function waitGameboard() {
   gameboard = new Gameboard();
   const ships = [new Ship(1), new Ship(3)];
-  shipsList.replaceChildren();
-  ships.forEach((ship) => {
-    const shipElement = createShipElement(ship);
-    shipElement.addEventListener("focus", () => {
-      prevFocusedShip = shipElement;
-    });
-    shipsList.appendChild(shipElement);
-  });
+  ships.forEach((ship) => addShipToList(ship));
   update(gameboard);
 }
