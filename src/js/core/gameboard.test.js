@@ -214,4 +214,28 @@ describe("gameboard", () => {
 
     expect(count).toBe(numberOfIterations);
   });
+
+  test("isAllShipsSunk returns true if all ships sunk otherwise false", () => {
+    const board = new Gameboard();
+    expect(board.isAllShipsSunk()).toBe(true);
+    board.placeShip(new Ship(1), 1, 1);
+    board.placeShip(new Ship(1), 3, 3);
+    expect(board.isAllShipsSunk()).toBe(false);
+    board.hit(1, 1);
+    expect(board.isAllShipsSunk()).toBe(false);
+    board.hit(3, 3);
+    expect(board.isAllShipsSunk()).toBe(true);
+  });
+
+  test("isAllShipsSunk detects if long ship sunk", () => {
+    const board = new Gameboard();
+    board.placeShip(new Ship(3), 1, 1);
+    expect(board.isAllShipsSunk()).toBe(false);
+    board.hit(1, 1);
+    expect(board.isAllShipsSunk()).toBe(false);
+    board.hit(2, 1);
+    expect(board.isAllShipsSunk()).toBe(false);
+    board.hit(3, 1);
+    expect(board.isAllShipsSunk()).toBe(true);
+  });
 });
