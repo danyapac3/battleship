@@ -50,24 +50,35 @@ export function init() {
   }
 
   update(new Gameboard());
-  board.addEventListener("click", ({ target }) => {
-    if (!target.classList.contains("cell") || !prevFocusedShip) {
+  board.addEventListener("mouseup", ({ target, button }) => {
+    if (!target.classList.contains("cell")) {
       return;
     }
 
     const x = parseInt(target.dataset.x);
     const y = parseInt(target.dataset.y);
-    const ship = elementToShip.get(prevFocusedShip);
 
-    try {
-      gameboard.placeShip(ship, x, y);
-    } catch {
-      return;
+    if (button === 0 && prevFocusedShip) {
+      const ship = elementToShip.get(prevFocusedShip);
+
+      try {
+        gameboard.placeShip(ship, x, y);
+      } catch {
+        return;
+      }
+      shipsList.removeChild(prevFocusedShip);
+      prevFocusedShip = null;
+    } else if (button === 2) {
+      const ship = gameboard.getShipAt(x, y);
+      if (ship) {
+        gameboard.removeShip(ship);
+      }
     }
 
-    shipsList.removeChild(prevFocusedShip);
-    prevFocusedShip = null;
     update(gameboard);
+  });
+  board.addEventListener("contextmenu", (e) => {
+    e.preventDefault();
   });
 }
 
