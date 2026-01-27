@@ -104,10 +104,12 @@ export default class Gameboard {
   }
 
   hit(x, y) {
+    this.#checkBounds(x, y);
+
     if (this.getHitAt(x, y)) {
       throw new Error(msgHittingSameCell);
     }
-    this.#checkBounds(x, y);
+
     this.#hitPositions.setCell(x, y, true);
     this.getShipAt(x, y)?.hit();
   }
