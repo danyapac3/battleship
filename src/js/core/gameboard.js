@@ -3,35 +3,10 @@ import Matrix from "../utils/matrix";
 export const BOARD_SIZE = 10;
 
 // error messages
-const msgOutOfBoard = "trying to access area about of board";
-
-export class OutOfBoundsError extends Error {
-  constructor() {
-    super("Trying to access area out of board");
-    this.name = "OutOfBounds";
-  }
-}
-
-export class ShipsOverlapError extends Error {
-  constructor() {
-    super("Ships mustn't overlap each other");
-    this.name = "ShipsOverlap";
-  }
-}
-
-export class SameShipPlacedError extends Error {
-  constructor() {
-    super("Can't place the same ship");
-    this.name = "SameShipPlaced";
-  }
-}
-
-export class HitSameCellError extends Error {
-  constructor(x, y) {
-    super(`Can't hit cell twice x: ${x}, y: ${y}`);
-    this.name = "HitSameCellError";
-  }
-}
+const msgOutOfBoard = "Trying to access area about of board.";
+const msgShipsOverlap = "Ships mustn't overlap each other.";
+const msgPlacingSameShip = "Cannot place same ship twice.";
+const msgHittingSameCell = "Cannot hit cell that already hit";
 
 export default class Gameboard {
   #hitPositions;
@@ -66,7 +41,7 @@ export default class Gameboard {
     );
 
     if (this.#ships.includes(ship)) {
-      throw new SameShipPlacedError();
+      throw new Error(msgPlacingSameShip);
     }
 
     for (let i = 0; i < ship.length; i++) {
@@ -92,7 +67,7 @@ export default class Gameboard {
         }
 
         if (this.#shipPositions.getCell(currentX, currentY) !== null) {
-          throw new ShipsOverlapError();
+          throw new Error(msgShipsOverlap);
         }
       });
     }
@@ -130,7 +105,7 @@ export default class Gameboard {
 
   hit(x, y) {
     if (this.getCell(x, y).isHit) {
-      throw new HitSameCellError(x, y);
+      throw new Error(msgHittingSameCell);
     }
     this.#checkBounds(x, y);
     this.#hitPositions.setCell(x, y, true);
