@@ -98,6 +98,14 @@ export function init() {
   });
 }
 
+export function show() {
+  screen.hidden = false;
+}
+
+export function hide() {
+  screen.hidden = true;
+}
+
 export function waitGameboard() {
   return new Promise((resolve) => {
     gameboardResolver = resolve;
