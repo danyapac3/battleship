@@ -104,20 +104,12 @@ export default class Gameboard {
   }
 
   hit(x, y) {
-    if (this.getCell(x, y).isHit) {
+    if (this.getHitAt(x, y)) {
       throw new Error(msgHittingSameCell);
     }
     this.#checkBounds(x, y);
     this.#hitPositions.setCell(x, y, true);
-    this.getCell(x, y).ship?.hit();
-  }
-
-  getCell(x, y) {
-    this.#checkBounds(x, y);
-    return {
-      ship: this.#shipPositions.getCell(x, y),
-      isHit: this.#hitPositions.getCell(x, y),
-    };
+    this.getShipAt(x, y)?.hit();
   }
 
   getShipAt(x, y) {
