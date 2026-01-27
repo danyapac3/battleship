@@ -4,14 +4,17 @@ import Gameboard from "../core/gameboard";
 const screenSelector = ".ship-placement-screen";
 const boardSelector = screenSelector + "__board";
 const shipsListSelector = screenSelector + "__ships-list";
+const readyButtonSelector = screenSelector + "__ready-button";
 
 const screen = document.querySelector(screenSelector);
 const board = screen.querySelector(boardSelector);
 const shipsList = screen.querySelector(shipsListSelector);
+const readyButton = screen.querySelector(readyButtonSelector);
 
 let elementToShip = new WeakMap();
 let gameboard = null;
 let prevFocusedShip = null;
+let gameboardResolver = null;
 
 function createCellElement(x, y) {
   const cell = document.createElement("div");
@@ -78,9 +81,10 @@ export function init() {
       prevFocusedShip = null;
     } else if (button === 2) {
       const ship = gameboard.getShipAt(x, y);
-      if (ship) {
-        gameboard.removeShip(ship);
+      if (!ship) {
+        return;
       }
+      gameboard.removeShip(ship);
       addShipToList(ship);
     }
 
@@ -89,11 +93,17 @@ export function init() {
   board.addEventListener("contextmenu", (e) => {
     e.preventDefault();
   });
+  readyButton.addEventListener("click", () => {
+    gameboardResolver?.(gameboard);
+  });
 }
 
-export async function waitGameboard() {
-  gameboard = new Gameboard();
-  const ships = [new Ship(1), new Ship(3)];
-  ships.forEach((ship) => addShipToList(ship));
-  update(gameboard);
+export function waitGameboard() {
+  return new Promise((resolve) => {
+    gameboardResolver = resolve;
+    gameboard = new Gameboard();
+    const ships = [new Ship(1), new Ship(3)];
+    ships.forEach((ship) => addShipToList(ship));
+    update(gameboard);
+  });
 }
