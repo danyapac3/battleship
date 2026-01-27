@@ -1,5 +1,3 @@
-import { HitSameCellError } from "./gameboard";
-
 export default class Game {
   #currentPlayer;
   #currentEnemy;
@@ -26,7 +24,7 @@ export default class Game {
   getWinner() {
     const players = [this.#currentEnemy, this.#currentPlayer];
     const looser = players.find((player) => {
-      const { ships } = player.gameboard;
+      const ships = player.gameboard.getShips();
       return ships.every((ship) => ship.isSunk());
     });
 
@@ -41,10 +39,7 @@ export default class Game {
     try {
       this.#currentEnemy.gameboard.hit(x, y);
     } catch (err) {
-      if (err instanceof HitSameCellError) {
-        return false;
-      }
-      throw err;
+      return false;
     }
 
     this.togglePlayer();
