@@ -35,8 +35,7 @@ function getCellElementInPosition(board, x, y) {
 }
 
 function update(gameboard) {
-  const { shipPositions } = gameboard;
-  shipPositions.forEach((ship, x, y) => {
+  gameboard.forEachCell(({ x, y, ship }) => {
     const cellElement = getCellElementInPosition(board, x, y);
 
     cellElement.classList.toggle("ship", !!ship);

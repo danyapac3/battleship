@@ -48,9 +48,7 @@ function getCellElementInPosition(board, x, y) {
 }
 
 function updateBoard(boardElement, board, hideUntouchedShipCells) {
-  const { hitPositions, shipPositions } = board;
-
-  hitPositions.forEach((isHit, x, y) => {
+  board.forEachCell(({ x, y, isHit, ship }) => {
     const cellElement = getCellElementInPosition(boardElement, x, y);
 
     if (hideUntouchedShipCells && !isHit) {
@@ -58,7 +56,7 @@ function updateBoard(boardElement, board, hideUntouchedShipCells) {
       return;
     }
 
-    cellElement.classList.toggle("ship", !!shipPositions.getCell(x, y));
+    cellElement.classList.toggle("ship", !!ship);
     cellElement.classList.toggle("hit", isHit);
   });
 }
