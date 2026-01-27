@@ -137,4 +137,8 @@ export default class Gameboard {
       }
     }
   }
+
+  isAllShipsSunk() {
+    return this.#ships.every((ship) => ship.isSunk());
+  }
 }
