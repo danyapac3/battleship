@@ -1,6 +1,8 @@
+const gameScreenSelector = ".game-screen";
 const playerBoardSelector = ".player-board";
 const enemyBoardSelector = ".enemy-board";
 
+const gameScreenElement = document.querySelector(gameScreenSelector);
 export const playerBoardElement = document.querySelector(playerBoardSelector);
 export const enemyBoardElement = document.querySelector(enemyBoardSelector);
 
@@ -61,17 +63,16 @@ function updateBoard(boardElement, board, hideUntouchedShipCells) {
   });
 }
 
-export function hidePlayerBoard() {
-  hideBoardCells(playerBoardElement);
+export function hide() {
+  gameScreenElement.hidden = true;
 }
 
-export function waitEnemyBoardClick() {
-  return (enemyBoardClickPromise ||= new Promise((resolve) => {
-    enemyBoardClickResolver = resolve;
-  }));
+export function show() {
+  gameScreenElement.hidden = false;
 }
 
 export const playerBoard = {
+  hide: () => hideBoardCells(playerBoardElement),
   update: (gameboard) => updateBoard(playerBoardElement, gameboard),
 };
 

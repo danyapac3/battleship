@@ -3,36 +3,24 @@ import Gameboard from "./core/gameboard";
 import Player from "./core/player";
 import Ship from "./core/ship";
 
-import { playerBoard, enemyBoard, init as initBoards } from "./elements/boards";
+import * as gameScreen from "./elements/game-screen";
 import * as shipPlacementScreen from "./elements/ship-placement-screen";
 
-function createPlayer(name) {
-  const gameboard = new Gameboard();
-  gameboard.placeShip(new Ship(1), 6, 3);
-  gameboard.placeShip(new Ship(1), 6, 5);
-  gameboard.placeShip(new Ship(1), 8, 9);
-  gameboard.placeShip(new Ship(1), 10, 9);
-  gameboard.placeShip(new Ship(2), 1, 1, "vertical");
-  gameboard.placeShip(new Ship(2), 2, 4, "horizontal");
-  gameboard.placeShip(new Ship(2), 3, 10, "horizontal");
-  gameboard.placeShip(new Ship(3), 2, 6, "horizontal");
-  gameboard.placeShip(new Ship(3), 3, 8, "horizontal");
-  gameboard.placeShip(new Ship(4), 8, 2, "vertical");
-  return new Player(name, gameboard);
-}
-
-function createGame() {
-  return new Game(createPlayer("player1"), createPlayer("player2"));
+function createGame(gameboard1, gameboard2) {
+  return new Game(
+    new Player("player1", gameboard1),
+    new Player("player2", gameboard2),
+  );
 }
 
 function updateBoards(game) {
-  playerBoard.update(game.getCurrentPlayer().gameboard);
-  enemyBoard.update(game.getCurrentEnemy().gameboard);
+  gameScreen.playerBoard.update(game.getCurrentPlayer().gameboard);
+  gameScreen.enemyBoard.update(game.getCurrentEnemy().gameboard);
 }
 
 async function playGame(game) {
   while (true) {
-    const { x, y } = await enemyBoard.waitClick();
+    const { x, y } = await gameScreen.enemyBoard.waitClick();
     const isRoundPlayed = game.playRound(x, y);
     if (isRoundPlayed) {
       const winner = game.getWinner();
@@ -46,14 +34,15 @@ async function playGame(game) {
 }
 
 export default async function ScreenController() {
+  gameScreen.init();
   shipPlacementScreen.init();
   shipPlacementScreen.show();
   const gameboard1 = await shipPlacementScreen.waitGameboard();
+  const gameboard2 = await shipPlacementScreen.waitGameboard();
   shipPlacementScreen.hide();
-  console.log(gameboard1);
-  initBoards();
+  gameScreen.show();
   while (true) {
-    const game = createGame();
+    const game = createGame(gameboard1, gameboard2);
     updateBoards(game);
     await playGame(game);
   }
