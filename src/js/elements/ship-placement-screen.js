@@ -1,5 +1,4 @@
-import Ship from "../core/ship";
-import Gameboard from "../core/gameboard";
+import { createDeferredPromise } from "../utils/common";
 
 const screenSelector = ".ship-placement-screen";
 const boardSelector = screenSelector + "__board";
@@ -12,9 +11,9 @@ const shipsList = screen.querySelector(shipsListSelector);
 const readyButton = screen.querySelector(readyButtonSelector);
 
 let elementToShip = new WeakMap();
-let gameboard = null;
 let prevFocusedShip = null;
-let gameboardResolver = null;
+let filledBoardDeferred = null;
+let activeGameboard = null;
 
 function createCellElement(x, y) {
   const cell = document.createElement("div");
@@ -53,6 +52,36 @@ function update(gameboard) {
   });
 }
 
+function cellClickHandler({ target, button }) {
+  if (!target.classList.contains("cell")) {
+    return;
+  }
+
+  const x = parseInt(target.dataset.x);
+  const y = parseInt(target.dataset.y);
+
+  if (button === 0 && prevFocusedShip) {
+    const ship = elementToShip.get(prevFocusedShip);
+
+    try {
+      activeGameboard.placeShip(ship, x, y);
+    } catch {
+      return;
+    }
+    shipsList.removeChild(prevFocusedShip);
+    prevFocusedShip = null;
+  } else if (button === 2) {
+    const ship = activeGameboard.getShipAt(x, y);
+    if (!ship) {
+      return;
+    }
+    activeGameboard.removeShip(ship);
+    addShipToList(ship);
+  }
+
+  update(activeGameboard);
+}
+
 export function init() {
   for (let y = 1; y <= 10; y++) {
     for (let x = 1; x <= 10; x++) {
@@ -60,42 +89,9 @@ export function init() {
     }
   }
 
-  update(new Gameboard());
-  board.addEventListener("mouseup", ({ target, button }) => {
-    if (!target.classList.contains("cell")) {
-      return;
-    }
-
-    const x = parseInt(target.dataset.x);
-    const y = parseInt(target.dataset.y);
-
-    if (button === 0 && prevFocusedShip) {
-      const ship = elementToShip.get(prevFocusedShip);
-
-      try {
-        gameboard.placeShip(ship, x, y);
-      } catch {
-        return;
-      }
-      shipsList.removeChild(prevFocusedShip);
-      prevFocusedShip = null;
-    } else if (button === 2) {
-      const ship = gameboard.getShipAt(x, y);
-      if (!ship) {
-        return;
-      }
-      gameboard.removeShip(ship);
-      addShipToList(ship);
-    }
-
-    update(gameboard);
-  });
-  board.addEventListener("contextmenu", (e) => {
-    e.preventDefault();
-  });
-  readyButton.addEventListener("click", () => {
-    gameboardResolver?.(gameboard);
-  });
+  board.addEventListener("mouseup", cellClickHandler);
+  board.addEventListener("contextmenu", (e) => e.preventDefault());
+  readyButton.addEventListener("click", () => filledBoardDeferred?.resolve());
 }
 
 export function show() {
@@ -106,12 +102,22 @@ export function hide() {
   screen.hidden = true;
 }
 
-export function waitGameboard() {
-  return new Promise((resolve) => {
-    gameboardResolver = resolve;
-    gameboard = new Gameboard();
-    const ships = [new Ship(1), new Ship(3)];
+export function cleanUp() {
+  prevFocusedShip = null;
+  filledBoardDeferred = null;
+  activeGameboard = null;
+  shipsList.replaceChildren();
+}
+
+export function waitFilledBoard(gameboard, ships) {
+  if (!filledBoardDeferred) {
+    filledBoardDeferred = createDeferredPromise();
+    activeGameboard = gameboard;
     ships.forEach((ship) => addShipToList(ship));
     update(gameboard);
+  }
+  return filledBoardDeferred.promise.then(() => {
+    cleanUp();
+    return gameboard;
   });
 }

@@ -33,12 +33,22 @@ async function playGame(game) {
   }
 }
 
+function createShips() {
+  return [new Ship(3), new Ship(2), new Ship(1)];
+}
+
 export default async function ScreenController() {
   gameScreen.init();
   shipPlacementScreen.init();
   shipPlacementScreen.show();
-  const gameboard1 = await shipPlacementScreen.waitGameboard();
-  const gameboard2 = await shipPlacementScreen.waitGameboard();
+  const gameboard1 = await shipPlacementScreen.waitFilledBoard(
+    new Gameboard(),
+    createShips(),
+  );
+  const gameboard2 = await shipPlacementScreen.waitFilledBoard(
+    new Gameboard(),
+    createShips(),
+  );
   shipPlacementScreen.hide();
   gameScreen.show();
   while (true) {
