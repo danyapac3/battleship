@@ -6,11 +6,18 @@ import Ship from "./core/ship";
 import * as gameScreen from "./elements/game-screen";
 import * as shipPlacementScreen from "./elements/ship-placement-screen";
 
+gameScreen.init();
+shipPlacementScreen.init();
+
 function createGame(gameboard1, gameboard2) {
   return new Game(
     new Player("player1", gameboard1),
     new Player("player2", gameboard2),
   );
+}
+
+function createShips() {
+  return [new Ship(3), new Ship(2), new Ship(1)];
 }
 
 function updateBoards(game) {
@@ -25,33 +32,31 @@ async function playGame(game) {
     if (isRoundPlayed) {
       const winner = game.getWinner();
       if (winner) {
-        alert(`${winner.name} is a winner! Congratulations!!!`);
-        return;
+        return winner;
       }
     }
     updateBoards(game);
   }
 }
 
-function createShips() {
-  return [new Ship(3), new Ship(2), new Ship(1)];
-}
-
-gameScreen.init();
-shipPlacementScreen.init();
-shipPlacementScreen.show();
-const gameboard1 = await shipPlacementScreen.waitFilledBoard(
-  new Gameboard(),
-  createShips(),
-);
-const gameboard2 = await shipPlacementScreen.waitFilledBoard(
-  new Gameboard(),
-  createShips(),
-);
-shipPlacementScreen.hide();
-gameScreen.show();
 while (true) {
+  shipPlacementScreen.show();
+  const gameboard1 = await shipPlacementScreen.waitFilledBoard(
+    new Gameboard(),
+    createShips(),
+  );
+
+  const gameboard2 = await shipPlacementScreen.waitFilledBoard(
+    new Gameboard(),
+    createShips(),
+  );
+
+  shipPlacementScreen.hide();
+  gameScreen.show();
+
   const game = createGame(gameboard1, gameboard2);
   updateBoards(game);
-  await playGame(game);
+  const winner = await playGame(game);
+  alert(`${winner.name} is a winner! Congratulations!!!`);
+  gameScreen.hide();
 }
