@@ -1,0 +1,13 @@
+features:
+  Add ship rotation during placement (Space key and mouse wheel).
+  Show a hover preview indicating where a ship will be placed.
+  Highlight hover in red when ship can't be placed.
+  Add a popup prompting the player to pass the device to the opponent.
+  Add a Randomize button to automatically populate the gameboard.
+  Add a game mode where the player plays against a bot.
+
+fixes:
+
+general:
+  Deploy the game to GitHub Pages.
+  Add a project description to the README.
