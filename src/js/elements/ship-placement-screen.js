@@ -10,10 +10,12 @@ const board = screen.querySelector(boardSelector);
 const shipsList = screen.querySelector(shipsListSelector);
 const readyButton = screen.querySelector(readyButtonSelector);
 
+let isShown = false;
 let elementToShip = new WeakMap();
 let prevFocusedShip = null;
 let filledBoardDeferred = null;
 let activeGameboard = null;
+let orientation = "horizontal";
 
 function createCellElement(x, y) {
   const cell = document.createElement("div");
@@ -64,7 +66,7 @@ function cellClickHandler({ target, button }) {
     const ship = elementToShip.get(prevFocusedShip);
 
     try {
-      activeGameboard.placeShip(ship, x, y);
+      activeGameboard.placeShip(ship, x, y, orientation);
     } catch {
       return;
     }
@@ -92,20 +94,36 @@ export function init() {
   board.addEventListener("mouseup", cellClickHandler);
   board.addEventListener("contextmenu", (e) => e.preventDefault());
   readyButton.addEventListener("click", () => filledBoardDeferred?.resolve());
+
+  document.addEventListener("wheel", toggleOrientation);
+  document.addEventListener("keyup", ({ key }) => {
+    if (key === " ") {
+      toggleOrientation();
+    }
+  });
+}
+
+export function toggleOrientation() {
+  if (isShown) {
+    orientation = orientation === "horizontal" ? "vertical" : "horizontal";
+  }
 }
 
 export function show() {
   screen.hidden = false;
+  isShown = true;
 }
 
 export function hide() {
   screen.hidden = true;
+  isShown = false;
 }
 
 export function cleanUp() {
   prevFocusedShip = null;
   filledBoardDeferred = null;
   activeGameboard = null;
+  orientation = "horizontal";
   shipsList.replaceChildren();
 }
 
