@@ -17,11 +17,53 @@ let filledBoardDeferred = null;
 let activeGameboard = null;
 let orientation = "horizontal";
 
+let highlight = {
+  inner_orientation: "horizontal",
+  inner_length: 1,
+
+  updateSizes() {
+    const width =
+      this.inner_orientation === "horizontal" ? this.inner_length : 1;
+    const height =
+      this.inner_orientation === "vertical" ? this.inner_length : 1;
+    board.style.setProperty("--highlight-width", width);
+    board.style.setProperty("--highlight-height", height);
+  },
+
+  show() {
+    board.classList.add("highlighted");
+  },
+
+  hide() {
+    board.classList.remove("highlighted");
+  },
+
+  set x(val) {
+    board.style.setProperty("--highlight-x", val);
+  },
+
+  set y(val) {
+    board.style.setProperty("--highlight-y", val);
+  },
+
+  set length(val) {
+    this.inner_length = val;
+    this.updateSizes();
+  },
+
+  set orientation(val) {
+    this.inner_orientation = val;
+    this.updateSizes();
+  },
+};
+
 function createCellElement(x, y) {
   const cell = document.createElement("div");
   cell.classList.add("cell");
   cell.dataset.x = x;
   cell.dataset.y = y;
+  cell.style.setProperty("--x", x);
+  cell.style.setProperty("--y", y);
   return cell;
 }
 
@@ -84,6 +126,27 @@ function cellClickHandler({ target, button }) {
   update(activeGameboard);
 }
 
+function cellOverHandler({ target }) {
+  if (!target.classList.contains("cell")) {
+    return;
+  }
+
+  if (!prevFocusedShip) {
+    return;
+  }
+
+  const x = parseInt(target.dataset.x);
+  const y = parseInt(target.dataset.y);
+
+  const ship = elementToShip.get(prevFocusedShip);
+
+  highlight.x = x;
+  highlight.y = y;
+  highlight.length = ship.length;
+
+  highlight.show();
+}
+
 export function init() {
   for (let y = 1; y <= 10; y++) {
     for (let x = 1; x <= 10; x++) {
@@ -91,7 +154,9 @@ export function init() {
     }
   }
 
+  board.addEventListener("mouseleave", () => highlight.hide());
   board.addEventListener("mouseup", cellClickHandler);
+  board.addEventListener("mouseover", cellOverHandler);
   board.addEventListener("contextmenu", (e) => e.preventDefault());
   readyButton.addEventListener("click", () => filledBoardDeferred?.resolve());
 
@@ -106,6 +171,7 @@ export function init() {
 export function toggleOrientation() {
   if (isShown) {
     orientation = orientation === "horizontal" ? "vertical" : "horizontal";
+    highlight.orientation = orientation;
   }
 }
 
