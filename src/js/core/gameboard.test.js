@@ -252,7 +252,6 @@ describe("gameboard", () => {
       new Ship(1),
     ];
     gameboard.randomize(ships);
-    console.log(gameboard);
     expect(new Set(ships).difference(new Set(gameboard.getShips())).size).toBe(
       0,
     );
