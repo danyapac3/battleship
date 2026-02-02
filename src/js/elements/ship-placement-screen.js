@@ -11,11 +11,80 @@ const shipsList = screen.querySelector(shipsListSelector);
 const readyButton = screen.querySelector(readyButtonSelector);
 
 let isShown = false;
-let elementToShip = new WeakMap();
-let prevFocusedShip = null;
 let filledBoardDeferred = null;
 let activeGameboard = null;
 let orientation = "horizontal";
+
+let shipsState = (() => {
+  let ships = new Set();
+  let selectedShip = null;
+  const elementToShip = new WeakMap();
+
+  function updateElement() {
+    const children = Array.from(ships)
+      .sort((a, b) => b.length - a.length)
+      .map((ship) => {
+        const elm = createShipElement(ship);
+        elementToShip.set(elm, ship);
+        return elm;
+      });
+
+    shipsList.replaceChildren(...children);
+  }
+
+  function replaceItems(items) {
+    ships = new Set(items);
+    updateElement();
+  }
+
+  function add(item) {
+    ships.add(item);
+    updateElement();
+  }
+
+  function remove(item) {
+    ships.delete(item);
+    if (selectedShip === item) {
+      unselectShip();
+    }
+    updateElement();
+  }
+
+  function clear() {
+    ships.clear();
+    unselectShip();
+    updateElement();
+  }
+
+  function getSelectedShip() {
+    return selectedShip;
+  }
+
+  function selectShip(ship) {
+    if (ships.has(ship)) {
+      selectedShip = ship;
+    }
+  }
+
+  function unselectShip() {
+    selectedShip = null;
+  }
+
+  function getShipByElement(elm) {
+    return elementToShip.get(elm);
+  }
+
+  return {
+    add,
+    remove,
+    clear,
+    replaceItems,
+    getShipByElement,
+    getSelectedShip,
+    selectShip,
+    unselectShip,
+  };
+})();
 
 let highlight = {
   inner_orientation: "horizontal",
@@ -69,7 +138,6 @@ function createCellElement(x, y) {
 
 function createShipElement(ship) {
   const element = document.createElement("div");
-  elementToShip.set(element, ship);
   element.classList.add("ship-placement-screen__ship");
   element.dataset.length = ship.length;
   element.tabIndex = 0;
@@ -78,14 +146,6 @@ function createShipElement(ship) {
 
 function getCellElementInPosition(board, x, y) {
   return board.querySelector(`.cell[data-x="${x}"][data-y="${y}"]`);
-}
-
-function addShipToList(ship) {
-  const shipElement = createShipElement(ship);
-  shipElement.addEventListener("focus", () => {
-    prevFocusedShip = shipElement;
-  });
-  shipsList.appendChild(shipElement);
 }
 
 function update(gameboard) {
@@ -104,23 +164,22 @@ function cellClickHandler({ target, button }) {
   const x = parseInt(target.dataset.x);
   const y = parseInt(target.dataset.y);
 
-  if (button === 0 && prevFocusedShip) {
-    const ship = elementToShip.get(prevFocusedShip);
+  if (button === 0 && shipsState.getSelectedShip()) {
+    const ship = shipsState.getSelectedShip();
 
     try {
       activeGameboard.placeShip(ship, x, y, orientation);
     } catch {
       return;
     }
-    shipsList.removeChild(prevFocusedShip);
-    prevFocusedShip = null;
+    shipsState.remove(ship);
   } else if (button === 2) {
     const ship = activeGameboard.getShipAt(x, y);
     if (!ship) {
       return;
     }
     activeGameboard.removeShip(ship);
-    addShipToList(ship);
+    shipsState.add(ship);
   }
 
   update(activeGameboard);
@@ -131,18 +190,18 @@ function cellOverHandler({ target }) {
     return;
   }
 
-  if (!prevFocusedShip) {
+  const selectedShip = shipsState.getSelectedShip();
+
+  if (!selectedShip) {
     return;
   }
 
   const x = parseInt(target.dataset.x);
   const y = parseInt(target.dataset.y);
 
-  const ship = elementToShip.get(prevFocusedShip);
-
   highlight.x = x;
   highlight.y = y;
-  highlight.length = ship.length;
+  highlight.length = selectedShip.length;
 
   highlight.show();
 }
@@ -166,6 +225,13 @@ export function init() {
       toggleOrientation();
     }
   });
+
+  shipsList.addEventListener("click", ({ target }) => {
+    if (target.classList.contains("ship-placement-screen__ship")) {
+      const ship = shipsState.getShipByElement(target);
+      shipsState.selectShip(ship);
+    }
+  });
 }
 
 export function toggleOrientation() {
@@ -186,18 +252,18 @@ export function hide() {
 }
 
 export function cleanUp() {
-  prevFocusedShip = null;
   filledBoardDeferred = null;
   activeGameboard = null;
   orientation = "horizontal";
-  shipsList.replaceChildren();
+  shipsState.clear();
 }
 
 export function waitFilledBoard(gameboard, ships) {
+  cleanUp();
   if (!filledBoardDeferred) {
     filledBoardDeferred = createDeferredPromise();
     activeGameboard = gameboard;
-    ships.forEach((ship) => addShipToList(ship));
+    shipsState.replaceItems(ships);
     update(gameboard);
   }
   return filledBoardDeferred.promise.then(() => {
