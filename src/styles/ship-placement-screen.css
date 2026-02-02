@@ -35,7 +35,21 @@
   border: 5px solid white;
 }
 
+.ship-placement-screen__buttons {
+  grid-area: bottom;
+  display: flex;
+  margin-bottom: 50px;
+  gap: 30px;
+}
+
 .ship-placement-screen__ready-button {
   grid-area: bottom;
   padding: 10px 20px;
+  width: 120px;
+}
+
+.ship-placement-screen__randomize-button {
+  grid-area: bottom;
+  padding: 10px 20px;
+  width: 120px;
 }

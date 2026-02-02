@@ -88,13 +88,19 @@ export default class Gameboard {
     const randomTo = (max) => Math.floor(Math.random() * (max + 1));
     const randomInt = (from, to) => randomTo(to - from) + from;
     const randomOrientation = () => ["horizontal", "vertical"][randomTo(1)];
+    const shipsToRemove = [];
 
     this.#ships.forEach((ship) => {
+      shipsToRemove.push(ship);
+    });
+
+    shipsToRemove.forEach((ship) => {
       this.removeShip(ship);
       ships.push(ship);
     });
+
     // ships sorted from longest to shortest;
-    sortedShips = ships.sort((a, b) => b.length - a.length);
+    const sortedShips = ships.sort((a, b) => b.length - a.length);
 
     sortedShips.forEach((ship) => {
       while (true) {

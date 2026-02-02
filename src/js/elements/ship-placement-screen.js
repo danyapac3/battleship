@@ -4,11 +4,13 @@ const screenSelector = ".ship-placement-screen";
 const boardSelector = screenSelector + "__board";
 const shipsListSelector = screenSelector + "__ships-list";
 const readyButtonSelector = screenSelector + "__ready-button";
+const randomizeButtonSelector = screenSelector + "__randomize-button";
 
 const screen = document.querySelector(screenSelector);
 const board = screen.querySelector(boardSelector);
 const shipsList = screen.querySelector(shipsListSelector);
 const readyButton = screen.querySelector(readyButtonSelector);
+const randomizeButton = screen.querySelector(randomizeButtonSelector);
 
 let isShown = false;
 let filledBoardDeferred = null;
@@ -78,6 +80,10 @@ const shipsState = (() => {
     return !ships.size;
   }
 
+  function getShips() {
+    return Array.from(ships);
+  }
+
   return {
     add,
     remove,
@@ -88,6 +94,7 @@ const shipsState = (() => {
     selectShip,
     unselectShip,
     isEmpty,
+    getShips,
   };
 })();
 
@@ -226,6 +233,16 @@ export function init() {
   readyButton.addEventListener("click", () => {
     if (shipsState.isEmpty()) {
       filledBoardDeferred?.resolve();
+    }
+  });
+  randomizeButton.addEventListener("click", () => {
+    if (activeGameboard) {
+      const ships = shipsState.getShips();
+      ships.forEach((ship) => {
+        shipsState.remove(ship);
+      });
+      activeGameboard.randomize(ships);
+      update(activeGameboard);
     }
   });
 
