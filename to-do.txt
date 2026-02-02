@@ -8,7 +8,7 @@ features:
   (low priority) Highlight hover is red when ship can't be placed.
 
 fixes:
-  highlight stays visible at where ship was placed and still can be rotated. 
+  ✓ highlight stays visible at position where ship was placed and still can be rotated. 
 
 refactor:
   magic numbers in game-screen init function can be changed with gameboard BOARD_SIZE;

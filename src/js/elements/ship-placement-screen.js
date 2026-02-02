@@ -178,6 +178,7 @@ function cellClickHandler({ target, button }) {
       return;
     }
     shipsState.remove(ship);
+    highlight.hide();
   } else if (button === 2) {
     const ship = activeGameboard.getShipAt(x, y);
     if (!ship) {
