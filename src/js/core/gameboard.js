@@ -84,6 +84,37 @@ export default class Gameboard {
     this.#shipOrientations.set(ship, orientation);
   }
 
+  randomize(ships) {
+    const randomTo = (max) => Math.floor(Math.random() * (max + 1));
+    const randomInt = (from, to) => randomTo(to - from) + from;
+    const randomOrientation = () => ["horizontal", "vertical"][randomTo(1)];
+
+    // ships sorted from longest to shortest;
+    sortedShips = ships.sort((a, b) => b.length - a.length);
+
+    sortedShips.forEach((ship) => {
+      while (true) {
+        let x, y;
+        const orientation = randomOrientation();
+
+        if (orientation === "horizontal") {
+          x = randomInt(1, BOARD_SIZE - ship.length + 1);
+          y = randomInt(1, BOARD_SIZE);
+        } else {
+          x = randomInt(1, BOARD_SIZE);
+          y = randomInt(1, BOARD_SIZE - ship.length + 1);
+        }
+
+        try {
+          this.placeShip(ship, x, y, orientation);
+        } catch (e) {
+          continue;
+        }
+        break;
+      }
+    });
+  }
+
   removeShip(ship) {
     if (!this.#ships.includes(ship)) {
       return false;
