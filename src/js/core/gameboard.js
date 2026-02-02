@@ -89,6 +89,10 @@ export default class Gameboard {
     const randomInt = (from, to) => randomTo(to - from) + from;
     const randomOrientation = () => ["horizontal", "vertical"][randomTo(1)];
 
+    this.#ships.forEach((ship) => {
+      this.removeShip(ship);
+      ships.push(ship);
+    });
     // ships sorted from longest to shortest;
     sortedShips = ships.sort((a, b) => b.length - a.length);
 
