@@ -1,13 +1,14 @@
 features:
   ✓ Add ship rotation during placement (Space key and mouse wheel).
   ✓ Show a hover preview indicating where a ship will be placed.
-  Highlight hover in red when ship can't be placed.
+  ✓ When placing ships make ready button inactive while there are unplaced ships remain.
   Add a popup prompting the player to pass the device to the opponent.
   Add a Randomize button to automatically populate the gameboard.
   Add a game mode where the player plays against a bot.
-  When placing ships make ready button inactive while there are unplaced ships remain.
+  (low priority) Highlight hover is red when ship can't be placed.
 
 fixes:
+  highlight stays visible at where ship was placed and still can be rotated. 
 
 refactor:
   magic numbers in game-screen init function can be changed with gameboard BOARD_SIZE;

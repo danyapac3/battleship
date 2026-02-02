@@ -15,7 +15,7 @@ let filledBoardDeferred = null;
 let activeGameboard = null;
 let orientation = "horizontal";
 
-let shipsState = (() => {
+const shipsState = (() => {
   let ships = new Set();
   let selectedShip = null;
   const elementToShip = new WeakMap();
@@ -74,6 +74,10 @@ let shipsState = (() => {
     return elementToShip.get(elm);
   }
 
+  function isEmpty() {
+    return !ships.size;
+  }
+
   return {
     add,
     remove,
@@ -83,6 +87,7 @@ let shipsState = (() => {
     getSelectedShip,
     selectShip,
     unselectShip,
+    isEmpty,
   };
 })();
 
@@ -217,7 +222,11 @@ export function init() {
   board.addEventListener("mouseup", cellClickHandler);
   board.addEventListener("mouseover", cellOverHandler);
   board.addEventListener("contextmenu", (e) => e.preventDefault());
-  readyButton.addEventListener("click", () => filledBoardDeferred?.resolve());
+  readyButton.addEventListener("click", () => {
+    if (shipsState.isEmpty()) {
+      filledBoardDeferred?.resolve();
+    }
+  });
 
   document.addEventListener("wheel", toggleOrientation);
   document.addEventListener("keyup", ({ key }) => {
