@@ -238,4 +238,23 @@ describe("gameboard", () => {
     board.hit(3, 1);
     expect(board.isAllShipsSunk()).toBe(true);
   });
+
+  test("all ships placed with randomize method", () => {
+    const gameboard = new Gameboard();
+    const ships = [
+      new Ship(5),
+      new Ship(5),
+      new Ship(5),
+      new Ship(4),
+      new Ship(3),
+      new Ship(3),
+      new Ship(2),
+      new Ship(1),
+    ];
+    gameboard.randomize(ships);
+    console.log(gameboard);
+    expect(new Set(ships).difference(new Set(gameboard.getShips())).size).toBe(
+      0,
+    );
+  });
 });
