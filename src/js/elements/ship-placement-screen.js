@@ -101,14 +101,11 @@ const shipsState = (() => {
 })();
 
 let highlight = {
-  inner_orientation: "horizontal",
   inner_length: 1,
 
-  updateSizes() {
-    const width =
-      this.inner_orientation === "horizontal" ? this.inner_length : 1;
-    const height =
-      this.inner_orientation === "vertical" ? this.inner_length : 1;
+  update() {
+    const width = orientation === "horizontal" ? this.inner_length : 1;
+    const height = orientation === "vertical" ? this.inner_length : 1;
     board.style.setProperty("--highlight-width", width);
     board.style.setProperty("--highlight-height", height);
   },
@@ -131,12 +128,7 @@ let highlight = {
 
   set length(val) {
     this.inner_length = val;
-    this.updateSizes();
-  },
-
-  set orientation(val) {
-    this.inner_orientation = val;
-    this.updateSizes();
+    this.update();
   },
 };
 
@@ -267,7 +259,7 @@ export function init() {
 export function toggleOrientation() {
   if (isShown) {
     orientation = orientation === "horizontal" ? "vertical" : "horizontal";
-    highlight.orientation = orientation;
+    highlight.update();
   }
 }
 
