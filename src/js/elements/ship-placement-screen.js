@@ -26,7 +26,7 @@ const shipsState = (() => {
     const children = Array.from(ships)
       .sort((a, b) => b.length - a.length)
       .map((ship) => {
-        const elm = createShipElement(ship);
+        const elm = createShipElement(ship, ship === selectedShip);
         elementToShip.set(elm, ship);
         return elm;
       });
@@ -66,10 +66,12 @@ const shipsState = (() => {
     if (ships.has(ship)) {
       selectedShip = ship;
     }
+    updateElement();
   }
 
   function unselectShip() {
     selectedShip = null;
+    updateElement();
   }
 
   function getShipByElement(elm) {
@@ -148,11 +150,12 @@ function createCellElement(x, y) {
   return cell;
 }
 
-function createShipElement(ship) {
+function createShipElement(ship, isSelected) {
   const element = document.createElement("div");
   element.classList.add("ship-placement-screen__ship");
   element.dataset.length = ship.length;
   element.tabIndex = 0;
+  element.classList.toggle("selected", isSelected);
   return element;
 }
 

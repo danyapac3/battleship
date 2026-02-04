@@ -31,7 +31,7 @@
   background-color: green;
 }
 
-.ship-placement-screen__ship:focus {
+.ship-placement-screen__ship.selected {
   border: 5px solid white;
 }
 
