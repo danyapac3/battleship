@@ -3,13 +3,17 @@ features:
   ✓ Show a hover preview indicating where a ship will be placed.
   ✓ When placing ships make ready button inactive while there are unplaced ships remain.
   ✓ Implement randomize function for gameboard class.
-  Add a Randomize button to automatically populate the gameboard.
+  ✓ Add a Randomize button to automatically populate the gameboard.
   Add a popup prompting the player to pass the device to the opponent.
   Add a game mode where the player plays against a bot.
   (low priority) Highlight hover is red when ship can't be placed.
+  Add screen for entering player nickname.
+  Add screen for choosing gamemode.
 
-fixes:
+bugs:
   ✓ highlight stays visible at position where ship was placed and still can be rotated. 
+  ✓ On the ship placement screen, clicking anywhere hides the ship’s selection highlight while the ship remains selected for placement. 
+  ✓ On the ship placement screen, highlight keeps after screen changed but global rotation changed.
 
 refactor:
   magic numbers in game-screen init function can be changed with gameboard BOARD_SIZE;
